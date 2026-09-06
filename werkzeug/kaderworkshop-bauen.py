@@ -154,8 +154,26 @@ bewertet und priorisiert.
 | Ordner | Inhalt |
 |---|---|
 | `daten/` | Die Themen im Volltext, die Standortbestimmung, die Rohdaten als JSON |
-| `system/` | Die Teilnahmeseite, die Serverrouten und das Dashboard |
+| `system/` | Teilnahmeseite, alle acht Serverrouten, Dashboard, Werkbank, Betriebsanleitung |
+| `konzept/` | Ablauf des Abends, Methodik, Übergabeunterlagen, Papierform als PDF |
+| `video/` | Das Lernvideo, die Sprechtexte und die Skripte, die es bauen |
 | `werkzeug/` | Skripte für Zugänge, Mailversand und die Verteilfassung |
+
+## Das Laufende ansehen
+
+Alles läuft unter **umfrage.win**. Die Adressen:
+
+| Adresse | Was zu sehen ist |
+|---|---|
+| [umfrage.win/kadertagung/?demo=1](https://umfrage.win/kadertagung/?demo=1) | **Der beste Einstieg.** Die Teilnahmeseite im Vorführbetrieb — ohne Zugangsdaten, mit Beispieldaten, ohne dass etwas gespeichert wird |
+| [umfrage.win/kadertagung/](https://umfrage.win/kadertagung/) | Der echte Zugang. Fragt nach persönlichem Link und PIN, ohne beides kommt man nicht weiter |
+| [umfrage.win/kadertagung/lernvideo.mp4](https://umfrage.win/kadertagung/lernvideo.mp4) | Zwei Minuten, zeigt den ganzen Ablauf |
+| [umfrage.win/kadertagung/dashboard](https://umfrage.win/kadertagung/dashboard) | Rücklauf und Auswertung. Zeigt ohne Leitungsschlüssel nichts an |
+| [umfrage.win/kadertagung/werkbank](https://umfrage.win/kadertagung/werkbank) | Das Arbeitsgerät für den Abend: Bewertung, Priorisierung, Portfolio. Startet leer, die Themen werden aus dem Dashboard hineingeladen |
+
+Der Demo-Betrieb ist der schnellste Weg, ein Gefühl für die Erhebung zu
+bekommen: Er durchläuft dieselben Schritte wie die echten Teilnehmenden,
+inklusive geführtem Gespräch, nur ohne Datenbank dahinter.
 
 ## Wie erhoben wird
 
@@ -272,6 +290,21 @@ def main() -> None:
                  'leitungsmails-bauen.py', 'nachtrag-bauen.py',
                  'standmeldung-bauen.py', 'kaderworkshop-bauen.py'):
         kopiere(WURZEL / 'werkzeug' / name, ZIEL / 'werkzeug' / name)
+
+    # Das Lernvideo und wie es entsteht
+    kopiere(WURZEL / 'docs/lernvideo-teilnahme.mp4', ZIEL / 'video/lernvideo.mp4')
+    for name in ('lernvideo-teilnahme-sprechtexte.md', 'lernvideo-elevenlabs.md',
+                 'lernvideo-teilnahme-szenen.json'):
+        kopiere(WURZEL / 'docs' / name, ZIEL / 'video' / name)
+    for name in ('schnitt.py', 'rec.mjs', 'mische.py'):
+        kopiere(WURZEL / 'scratchpad/video' / name, ZIEL / 'video/werkzeug' / name)
+
+    # Die Konzeptseiten — Ablauf des Abends, Methodik, Uebergabe
+    for name in ('index.html', 'programm.html', 'vorbereitung.html',
+                 'betrieb.html', 'fuer-melina.html'):
+        kopiere(WURZEL / name, ZIEL / 'konzept' / name)
+    kopiere(WURZEL / 'docs/werkbank-papierform.pdf',
+            ZIEL / 'konzept' / 'werkbank-papierform.pdf')
 
     # Unterlagen
     for name in ('abendessen-ziegelhuette.md', 'betrieb-und-datenschutz.md',
