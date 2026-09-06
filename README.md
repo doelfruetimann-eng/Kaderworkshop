@@ -3,6 +3,10 @@
 Spitäler Schaffhausen, Kadertagung vom 14. September 2026.
 Privates Repo. Bitte zuerst [DATENSCHUTZ.md](DATENSCHUTZ.md) lesen.
 
+**Für PeakPrivacy:** Was wir aus den Themen an Anforderungen ableiten und
+welche zwölf Fragen wir stellen, steht in
+[unterlagen/anforderungen-peakprivacy.md](unterlagen/anforderungen-peakprivacy.md).
+
 ## Worum es geht
 
 Das Spital hat einen Kredit für die Einführung von KI bewilligt. Statt

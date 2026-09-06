@@ -545,5 +545,141 @@
       "chatZeit": null
     }
   ],
-  "cluster": null
+  "cluster": {
+    "daten": {
+      "clusters": [
+        {
+          "titel": "Stoerungs- und Maengelmeldungen zentral erfassen und nachverfolgen",
+          "zusammenfassung": "Meldungen laufen ueber Telefon, Mail oder muendlich statt ueber ein nutzerfreundliches Ticketsystem; Matrix 42/24 ist technikgetrieben, Meldungen versanden, sind schwer auffindbar und muessen manuell weitergeleitet werden.",
+          "quer": true,
+          "themen": [
+            {
+              "titel": "Intransparente Auftragserfassung und Ticketsuche in Matrix 42",
+              "einheit": "Immobilien und Betrieb",
+              "person": "Dölf Rütimann"
+            },
+            {
+              "titel": "Maengelmeldung und -verfolgung: Meldungen versanden ohne Kontrolle und Priorisierung",
+              "einheit": "Immobilien und Betrieb",
+              "person": "Dölf Rütimann"
+            },
+            {
+              "titel": "Fehlendes einheitliches Meldetool fuer Stoerungen an Medizintechnik-Geraeten",
+              "einheit": "Medizintechnik",
+              "person": "Brian Sailer"
+            }
+          ]
+        },
+        {
+          "titel": "Systembrueche zwischen Ticketing, Geraetebuch, Fibu und Budget schliessen",
+          "zusammenfassung": "Ticketing, Geraeteinventare, IT-Systeme und Finanzsysteme sind nicht verknuepft, was doppelte Datenhaltung, manuelle Budgetpflege und aufwendige Koordination erzwingt.",
+          "quer": true,
+          "themen": [
+            {
+              "titel": "Fragmentierter Investitions- und Projektprozess: Matrix42, Fibu und Budget nicht verknuepft",
+              "einheit": "Controlling / Reporting",
+              "person": "Sevil Erdogan"
+            },
+            {
+              "titel": "Zu viele IT-Schnittstellen bei Anbindung medizintechnischer Geraete",
+              "einheit": "Medizintechnik",
+              "person": "Brian Sailer"
+            }
+          ]
+        },
+        {
+          "titel": "Geraetedokumentation und Lifecycle-Auswertungen automatisieren",
+          "zusammenfassung": "Serviceberichte und Pruefprotokolle werden einzeln von Hand abgelegt, und Auswertungen zu Kosten, Stoerhaeufigkeit und Investitionsplanung sind aus dem Geraetebuch nur mit hohem Aufwand moeglich.",
+          "quer": false,
+          "themen": [
+            {
+              "titel": "KI-gestuetztes Geraetebuch: automatische Ablage von Serviceberichten",
+              "einheit": "Medizintechnik",
+              "person": "Brian Sailer"
+            },
+            {
+              "titel": "KI-gestütztes Lifecycle- und Investitionsmanagement Medizintechnik",
+              "einheit": "Medizintechnik",
+              "person": "Brian Sailer"
+            }
+          ]
+        },
+        {
+          "titel": "Belegverarbeitung in Einkauf und Logistik automatisieren",
+          "zusammenfassung": "Auftragsbestaetigungen und Lieferscheine werden taeglich manuell geprueft, gescannt, abgelegt und der Bestellung angehaengt - hoher Zeitaufwand und Fehleranfaelligkeit.",
+          "quer": false,
+          "themen": [
+            {
+              "titel": "Manuelle Verarbeitung von 20-30 Auftragsbestaetigungen pro Tag",
+              "einheit": "Einkauf / Logistik",
+              "person": "Raphael Kuhn"
+            },
+            {
+              "titel": "Automatisierter Wareneingang: Lieferscheine direkt an Bestellung anbinden",
+              "einheit": "Einkauf / Logistik",
+              "person": "Raphael Kuhn"
+            }
+          ]
+        },
+        {
+          "titel": "Excel-basierte Abgleiche und Auswertungen aus mehreren Systemen ersetzen",
+          "zusammenfassung": "Daten werden aus zwei oder mehr Systemen nach Excel exportiert und von Hand abgeglichen, priorisiert und zurueckgepflegt - zeitintensiv und fehleranfaellig.",
+          "quer": true,
+          "themen": [
+            {
+              "titel": "Halbjaehrliche Kanban-Kontrolle der Stationslager manuell in Excel",
+              "einheit": "Einkauf / Logistik",
+              "person": "Raphael Kuhn"
+            },
+            {
+              "titel": "Debitoren: Offene Posten priorisieren und Betreibungen aufbereiten",
+              "einheit": "Rechnungswesen, Ertragsmanagement, Patientenadministration",
+              "person": "Fabienne Grant"
+            }
+          ]
+        },
+        {
+          "titel": "Manuelle Stammdaten- und Listenpflege in ERP und Planung ablösen",
+          "zusammenfassung": "Tarifwerte, Kontaktdaten in Reports sowie An-/Abwesenheitslisten werden aus PDFs und Word-Dateien manuell zusammengetragen und in die Systeme nachgefuehrt.",
+          "quer": true,
+          "themen": [
+            {
+              "titel": "Kontaktdaten neuer Lernender manuell in 6 Rechnungsreports pflegen",
+              "einheit": "Querschnittsfunktionen und ERP",
+              "person": "Yannick Steiner"
+            },
+            {
+              "titel": "Manuelle Umsetzung neuer Tarifvertraege im ERP",
+              "einheit": "Querschnittsfunktionen und ERP",
+              "person": "Yannick Steiner"
+            },
+            {
+              "titel": "An-/Abwesenheitsliste für Telefonzentrale und Portier automatisieren",
+              "einheit": "Rechnungswesen, Ertragsmanagement, Patientenadministration",
+              "person": "Fabienne Grant"
+            }
+          ]
+        }
+      ],
+      "rest": [
+        {
+          "titel": "Einholen von Offerten",
+          "einheit": "Immobilien und Betrieb",
+          "person": "Dölf Rütimann"
+        },
+        {
+          "titel": "Terminkoordination fuer Wartungen zwischen Stationen und externen Dienstleistern",
+          "einheit": "Medizintechnik",
+          "person": "Brian Sailer"
+        },
+        {
+          "titel": "Traktanden, Protokolle und Pendenzen für Sitzungen, Huddles und bilaterale Austausche",
+          "einheit": "Rechnungswesen, Ertragsmanagement, Patientenadministration",
+          "person": "Fabienne Grant"
+        }
+      ],
+      "anzahl": 17
+    },
+    "gesendet": "2026-09-06T15:55:26.565Z"
+  }
 }
