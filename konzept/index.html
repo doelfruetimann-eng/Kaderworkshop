@@ -442,6 +442,38 @@ input[type="range"]{width:100%;accent-color:var(--accent);margin:0}
 .ws-hilfe{font-size:clamp(12px,1vw,15px);color:var(--ink-3)}
 .ws-hilfe kbd{font-family:inherit;font-weight:700;background:var(--surface-2);
   border:1px solid var(--line-2);border-radius:4px;padding:1px 6px;margin:0 2px}
+/* «safe center»: volle Bilder werden oben angeschnitten, wenn die Bühne
+   zentriert und zu hoch ist — safe fällt dann auf flex-start zurück. */
+.ws-buehne{justify-content:safe center}
+.ws-karte .v.ws-themen{font-size:clamp(14px,1.25vw,20px);line-height:1.45;color:var(--ink-2);display:block;margin-top:10px}
+.ws-zahlen{display:flex;gap:clamp(20px,4vw,64px);flex-wrap:wrap}
+.ws-zahl{display:flex;flex-direction:column}
+.ws-zahl b{font-size:clamp(44px,6vw,96px);line-height:1;color:var(--zahl);font-variant-numeric:tabular-nums}
+.ws-zahl span{font-size:clamp(14px,1.3vw,20px);color:var(--ink-3);margin-top:6px}
+.ws-liste{display:flex;flex-direction:column;gap:clamp(6px,.8vh,12px)}
+.ws-zeile{display:flex;align-items:center;gap:clamp(12px,1.6vw,24px);padding:clamp(8px,1vh,14px) clamp(12px,1.4vw,20px);
+  background:var(--surface);border:2px solid var(--line);border-radius:var(--r-s);font-size:clamp(16px,1.6vw,26px)}
+.ws-zeile.an{border-color:var(--bordeaux);background:var(--signal-soft)}
+.ws-zeile .nr{width:clamp(30px,2.6vw,44px);height:clamp(30px,2.6vw,44px);border-radius:50%;display:grid;place-items:center;
+  background:var(--surface-2);font-weight:700;font-size:clamp(13px,1.2vw,18px);flex:none}
+.ws-zeile.an .nr{background:var(--bordeaux);color:#FFFFFF}
+.ws-zeile .t{flex:1;font-weight:600}
+.ws-zeile .e{color:var(--ink-3);font-size:.75em;white-space:nowrap}
+.ws-zeile .s{font-variant-numeric:tabular-nums;color:var(--zahl);font-weight:700;min-width:3.2em;text-align:right}
+.ws-wahl{display:flex;gap:clamp(8px,1vw,14px);flex-wrap:wrap}
+.ws-wahl button{padding:clamp(10px,1.2vh,16px) clamp(14px,1.6vw,24px);border-radius:var(--r-s);border:2px solid var(--line-2);
+  background:var(--surface);color:var(--ink);font-size:clamp(15px,1.4vw,22px);font-weight:600;cursor:pointer;text-align:left}
+.ws-wahl button.an{border-color:var(--bordeaux);background:var(--bordeaux);color:#FFFFFF}
+.ws-wahl button kbd{font-family:inherit;opacity:.6;margin-right:8px}
+.ws-plan{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,1.6vw,22px)}
+@media (max-width:900px){ .ws-plan{grid-template-columns:1fr} }
+.ws-plan ol{margin:0;padding-left:1.3em;font-size:clamp(15px,1.4vw,22px);line-height:1.45}
+.ws-plan li{margin-bottom:.35em}
+.ws-hinweis{font-size:clamp(14px,1.2vw,19px);color:var(--ink-2);padding:clamp(10px,1.2vh,16px) clamp(14px,1.6vw,22px);
+  border-left:4px solid var(--bordeaux);background:var(--signal-soft);border-radius:0 var(--r-s) var(--r-s) 0}
+.ws-kopf select{background:transparent;color:var(--struktur-ink);border:1px solid rgba(255,255,255,.35);
+  border-radius:6px;padding:4px 8px;font-size:clamp(12px,1vw,15px)}
+.ws-kopf select option{color:#111}
 .ws-matrix{max-width:min(78vw,900px);margin:0 auto;width:100%}
 @media (max-width:700px){ .ws-buehne{justify-content:flex-start} }
 :root[data-theme="dark"] .mx-dot,
@@ -872,14 +904,14 @@ const ABLAUF = [
   {t:"17:05", d:35, blk:"sammeln", was:"Pain Points vorstellen",
    wer:"Alle",
    detail:"Jede Einheit stellt ihr stärkstes Thema in drei Minuten vor. Die übrigen Themen bleiben in der Werkbank und zählen in der Priorisierung voll mit.",
-   mat:"Beamer: Workshop-Modus", erg:"Alle Einheiten haben eingebracht."},
+   mat:"Beamer: Workshop-Modus, Phasen Auslegeordnung und Vorstellen", erg:"Alle Einheiten haben eingebracht."},
 
   {t:"17:40", d:10, blk:"pause", was:"Pause", wer:"", detail:"", mat:"", erg:""},
 
   {t:"17:50", d:30, blk:"bewerten", was:"Priorisierung live",
    wer:"Melina, alle",
    detail:"Gemeinsam bewerten und die Gewichtung setzen: Zählt spürbarer Nutzen mehr oder schnelle Umsetzbarkeit? Die Rangliste ändert sich vor aller Augen.",
-   mat:"Beamer: Workshop-Modus, Bewerten", erg:"Rangliste und Portfolio stehen."},
+   mat:"Beamer: Workshop-Modus, Phasen Cluster bis Kandidaten", erg:"Rangliste und Portfolio stehen, Kandidaten markiert."},
 
   {t:"18:20", d:30, blk:"bewerten", was:"Top-Themen vertiefen",
    wer:"Melina, alle",
@@ -1064,6 +1096,8 @@ function load(){
     if(!s.einladung.basis && s.einladung.werkbank) s.einladung.basis = s.einladung.werkbank;
     delete s.einladung.werkbank; delete s.einladung.anleitung;
     migriereBewertungen(s);
+    s.items.forEach(i => { if(i.loesungsart === undefined) i.loesungsart = "";
+                           if(i.vertiefen === undefined) i.vertiefen = false; });
     return s;
   }catch(e){ return leerState(); }
 }
@@ -1080,7 +1114,8 @@ function neuerItem(){
     merkmale:[], werte:[],
     uc_name:"", uc_nutzen:"", uc_risiken:"", uc_test:"",
     m_groesse:"", m_heute:"", m_ziel:"", m_wer:"", m_termin:"",
-    bewertung:null, notiz:""
+    bewertung:null, notiz:"",
+    loesungsart:"", vertiefen:false   /* Workshop: Loesungsart A-E, in die Vertiefung */
   };
 }
 
@@ -2262,6 +2297,11 @@ function alsMarkdown(){
     L.push("");
     L.push(`**Bereich:** ${it.bereich||"—"} · **Eingebracht von:** ${it.person||"—"}` + (bewertet(it)?` · **Score:** ${score(it)}/100`:""));
     if(it.merkmale.length) L.push(`**Merkmale:** ${it.merkmale.join(", ")}`);
+    if(it.vertiefen || it.loesungsart){
+      const la = LOESUNGSARTEN.find(x => x.k === it.loesungsart);
+      L.push(`**Workshop:** ${it.vertiefen ? "in die Vertiefung · " : ""}` +
+             (la ? `Lösungsart ${la.k} — ${la.n}` : "Lösungsart offen"));
+    }
     L.push("");
     LEITFRAGEN.forEach((f,k)=>{
       L.push(`**${k+1}. ${f.t}**`);
@@ -3287,29 +3327,173 @@ const Interview = {
 
 /* ============================================================
    Workshop-Modus — die Ansicht für den Beamer
+   Folgt dem Ablauf des Abends, nicht dem einzelnen Thema:
+   erst alle hören, dann gruppieren, dann bewerten, dann entscheiden,
+   zum Schluss: was davon PeakPrivacy tragen kann.
    Ein Gedanke pro Bild, aus fünf Metern lesbar, mit der Tastatur
    bedienbar. Namen erscheinen hier nie: am Tisch wird über Themen
    gesprochen, nicht über Personen.
    ============================================================ */
+
+/* Lösungsarten — wonach am Schluss sortiert wird. Das Raster stammt aus
+   docs/anforderungen-peakprivacy.md; der Bauplan je Art nennt, was
+   PeakPrivacy laut eigener Dokumentation liefert (Datensammlung,
+   Konstruktor, Chat-/Assistants-/Dateien-API) und was als eigener
+   Konnektor darum herum gebaut werden muss. Fertige Konnektoren zu ERP,
+   Matrix 42 oder Postfächern sind bei PeakPrivacy nicht dokumentiert —
+   das steht bewusst so auf der Leinwand. */
+const LOESUNGSARTEN = [
+  {k:"A", n:"Dokumente lesen, Daten herausziehen",
+   kurz:"Mail, PDF, Scan → Felder",
+   muster:/auftragsbest|lieferschein|servicebericht|\bpdf\b|\bscan|vertrag|rechnung|beleg|e-?mail|anhang/i,
+   pp:["Chat-Completions-API (OpenAI-kompatibel): Dokumenttext hinein, Felder als JSON heraus",
+       "Alternativ Dateien-API + Assistants-API «ask» für längere Unterlagen"],
+   eigen:["Abholer: Postfach-Regel oder überwachter Scan-Ordner",
+          "Text aus PDF; bei Scans OCR — bei PeakPrivacy nicht dokumentiert",
+          "Ablage des Ergebnisses, Vorlage an einen Menschen bei Unsicherheit"],
+   schritte:["API-Token unter app.peakprivacy.ch/api-tokens",
+             "Prompt mit Feldliste (Artikel, Menge, Preis, Datum) und einem Beispiel",
+             "Zehn echte Belege durchlaufen lassen, Trefferquote messen",
+             "Unsichere Fälle zur Freigabe vorlegen — erst dann automatisch"],
+   offen:"OCR für Scans; Anonymisierung (anonymize) darf Artikelnummern nicht verändern"},
+  {k:"B", n:"Herausgezogenes abgleichen und buchen",
+   kurz:"gegen ERP prüfen, bei Übereinstimmung buchen",
+   muster:/\berp\b|fibu|abgleich|abgleichen|buchen|bestellung|toleranz|abweichung|kanban|bestand/i,
+   pp:["Liefert nur die strukturierten Felder (wie A)",
+       "Abgleich und Buchung sind nicht PeakPrivacy — das ist eigener Code"],
+   eigen:["Vergleich gegen die Bestellung im ERP (lesend)",
+          "Toleranzregel: unter x Prozent selbst buchen, sonst vorlegen",
+          "Buchung im ERP (schreibend) mit Protokoll: wer, wann, was"],
+   schritte:["ERP-Schnittstelle klären — welches System, Lese- und Schreibrecht",
+             "Toleranz mit dem Einkauf festlegen",
+             "Protokoll und Freigabe bauen",
+             "Pilot im Vorlage-Modus, danach automatisch"],
+   offen:"Hat das ERP eine Schnittstelle, und wer darf darüber schreiben?"},
+  {k:"C", n:"Meldungen aufnehmen, ins Ticketsystem leiten",
+   kurz:"Chatbot nimmt Meldung, Ticket in Matrix 42",
+   muster:/matrix\s?42|ticket|meldung|melde|störung|stoerung|mangel|mängel|maengel|dispo|anfrage verteil/i,
+   pp:["Konstruktor als Meldeassistent: nimmt die Meldung auf, fragt Pflichtfelder nach",
+       "Fotos: bei PeakPrivacy «nicht oder eingeschränkt unterstützt»"],
+   eigen:["Schnittstelle zu Matrix 42: Ticket anlegen, Status lesen",
+          "Routing-Regeln: welche Meldeart an welchen Bereich",
+          "Rückmeldung an die meldende Person"],
+   schritte:["Matrix-42-Schnittstelle mit der ICT klären",
+             "Pflichtfelder je Meldeart festlegen",
+             "Konstruktor-Prompt schreiben und mit zehn Meldungen testen",
+             "Ticket-Erzeugung anbinden, dann Rückmeldung"],
+   offen:"Gibt es eine Matrix-42-Schnittstelle? Wie kommen Fotos hinein?"},
+  {k:"D", n:"Termine und Abläufe auslösen",
+   kurz:"Auslöser in einem System, Aktion in einem anderen",
+   muster:/termin|wartung|report|lernende|auslösen|ausloesen|automatisch anstossen|erinnerung/i,
+   pp:["Kaum beteiligt — höchstens Textbausteine für die Benachrichtigung"],
+   eigen:["Regelwerk: Auslöser (Gerätebuch, HR) → Aktion (Termin, Report)",
+          "Bestätigungsschritt durch einen Menschen"],
+   schritte:["Auslöser und Ziel benennen",
+             "Schnittstelle des Zielsystems klären",
+             "Bestätigung einbauen, dann laufen lassen"],
+   offen:"Braucht es hier überhaupt KI — oder nur Automatisierung?"},
+  {k:"E", n:"Fragen an die eigenen Daten stellen",
+   kurz:"Wissensbox, Antwort mit Quelle",
+   muster:/auswert|prognose|dialog|lifecycle|investition|anlagen|übersicht|uebersicht|kennzahl|analys/i,
+   pp:["Datensammlung (Wissensbox) + Konstruktor — das Kernprodukt",
+       "Grenzen laut Doku: 3 GB, kein Excel, kein Sync — Daten müssen exportiert und hochgeladen werden"],
+   eigen:["Exporter: Berichte und Tabellen regelmässig als CSV oder PDF in die Datensammlung (Dateien-API)",
+          "Rechte: wer darf welche Sammlung befragen"],
+   schritte:["Datenquellen als CSV oder PDF exportieren",
+             "Datensammlung anlegen, Konstruktor mit Rollen-Prompt",
+             "Zehn Testfragen mit bekannten Antworten",
+             "Sichtbarkeit je Rolle regeln"],
+   offen:"Automatischer Abgleich der Daten; Zugriffsrechte je Rolle"}
+];
+
+function loesungsartVorschlag(it){
+  const txt = [it.f1, it.f2, it.f4, it.f6, it.titel].join(" ");
+  const treffer = LOESUNGSARTEN.map(l => ({k:l.k, n:(txt.match(l.muster)||[]).length}))
+                               .filter(x => x.n).sort((a,b)=>b.n-a.n);
+  return treffer.length ? treffer[0].k : "";
+}
+
 const Workshop = {
   offen:false, i:0, kritIdx:0, bilder:[],
 
-  /* Reihenfolge: bewertete Themen zuerst nach Score, danach die offenen.
-     So steht am Anfang, was die Runde schon eingeordnet hat. */
-  liste(){
-    return rangliste().concat(S.items.filter(i=>!bewertet(i)));
+  PHASEN: [
+    {k:"auslegeordnung", n:"Auslegeordnung"},
+    {k:"vorstellen",     n:"Vorstellen"},
+    {k:"cluster",        n:"Cluster"},
+    {k:"bewerten",       n:"Bewerten"},
+    {k:"portfolio",      n:"Portfolio"},
+    {k:"gewichtung",     n:"Gewichtung"},
+    {k:"kandidaten",     n:"Kandidaten"},
+    {k:"peakprivacy",    n:"PeakPrivacy"},
+    {k:"ergebnis",       n:"Ergebnis"}
+  ],
+
+  /* Vorstellen: nach Einheit gruppiert, damit jede Person ihre Themen am
+     Stück zeigt. Reihenfolge der Einheiten wie in den Stammdaten. */
+  nachEinheit(){
+    const reihe = EINHEITEN.map(e => e.b);
+    const ix = b => { const i = reihe.indexOf(b); return i < 0 ? 99 : i; };
+    return S.items.slice().sort((a,b)=> ix(a.bereich)-ix(b.bereich) || (a.titel||"").localeCompare(b.titel||""));
+  },
+
+  /* Cluster: Themen mit gleichem Cluster-Titel zusammen, grösste Gruppe
+     zuerst; Einzelne am Schluss. Stabil — sortiert sich nicht um, wenn
+     Bewertungen dazukommen. */
+  cluster(){
+    const gruppen = new Map();
+    S.items.forEach(it => {
+      const c = (it.cluster||"").trim();
+      if(!gruppen.has(c)) gruppen.set(c, []);
+      gruppen.get(c).push(it);
+    });
+    const mit = [...gruppen.entries()].filter(([c,l]) => c && l.length > 1)
+                  .sort((a,b)=> b[1].length - a[1].length);
+    const einzeln = [...gruppen.entries()].filter(([c,l]) => !c || l.length < 2)
+                  .flatMap(([,l]) => l);
+    return {gruppen:mit, einzeln};
+  },
+
+  /* Bewerten in Cluster-Reihenfolge: ähnliche Themen hintereinander,
+     damit die Massstäbe gleich bleiben. */
+  nachCluster(){
+    const {gruppen, einzeln} = this.cluster();
+    return gruppen.flatMap(([,l]) => l).concat(einzeln);
+  },
+
+  kandidaten(){
+    const markiert = S.items.filter(i => i.vertiefen);
+    if(markiert.length) return rangliste().filter(i => i.vertiefen).concat(markiert.filter(i => !bewertet(i)));
+    return rangliste().slice(0,3);
   },
 
   bauen(){
-    const b = [];
-    this.liste().forEach(it=>{
-      b.push({typ:"thema", id:it.id});
-      b.push({typ:"verstehen", id:it.id});
-      DIMENSIONEN.forEach(d => b.push({typ:"bewerten", id:it.id, dim:d.k}));
-      b.push({typ:"position", id:it.id});
+    const b = [{typ:"auslegeordnung"}];
+    this.nachEinheit().forEach(it => {
+      b.push({typ:"vorstellen", id:it.id, teil:"thema"});
+      b.push({typ:"vorstellen", id:it.id, teil:"verstehen"});
     });
-    if(b.length) b.push({typ:"ergebnis"});
+    const {gruppen, einzeln} = this.cluster();
+    if(gruppen.length || einzeln.length) b.push({typ:"cluster"});
+    this.nachCluster().forEach(it => {
+      DIMENSIONEN.forEach(d => b.push({typ:"bewerten", id:it.id, dim:d.k}));
+    });
+    b.push({typ:"portfolio"});
+    b.push({typ:"gewichtung"});
+    b.push({typ:"kandidaten"});
+    b.push({typ:"peakprivacy", teil:"intro"});
+    this.kandidaten().forEach(it => b.push({typ:"peakprivacy", id:it.id}));
+    b.push({typ:"ergebnis"});
     return b;
+  },
+
+  /* Bilder neu bauen, Position halten — nötig, wenn Kandidaten oder
+     Cluster sich ändern, während der Modus offen ist. */
+  neuBauen(){
+    const alt = this.bilder[this.i];
+    this.bilder = this.bauen();
+    const gleich = x => alt && x.typ === alt.typ && x.id === alt.id && x.dim === alt.dim && x.teil === alt.teil;
+    const j = this.bilder.findIndex(gleich);
+    this.i = j >= 0 ? j : Math.min(this.i, this.bilder.length-1);
   },
 
   start(){
@@ -3342,9 +3526,15 @@ const Workshop = {
     this.i = neu; this.kritIdx = 0; this.zeigen();
   },
 
-  /* Wert setzen und zum nächsten Kriterium rücken. Ist die Dimension
-     fertig, bleibt der Fokus auf dem letzten — weitergeblättert wird
-     bewusst von Hand, damit die Runde nachjustieren kann. */
+  springen(phase){
+    const j = this.bilder.findIndex(b => b.typ === phase);
+    if(j >= 0){ this.i = j; this.kritIdx = 0; this.zeigen(); }
+  },
+
+  /* Wert setzen und zum nächsten Kriterium rücken. Ist das letzte
+     Kriterium der Dimension gesetzt, geht es von selbst aufs nächste
+     Bild — 154 Entscheide in dreissig Minuten brauchen jeden gesparten
+     Tastendruck. Zurück geht mit ← jederzeit. */
   werten(stufe){
     const bild = this.bilder[this.i];
     if(!bild || bild.typ !== "bewerten") return;
@@ -3352,23 +3542,40 @@ const Workshop = {
     if(!it.bewertung) it.bewertung = KRITERIEN.reduce((a,c)=>(a[c.k]=3,a),{});
     const ks = kriterienVon(bild.dim);
     it.bewertung[ks[this.kritIdx].k] = clamp(stufe,1,5);
-    if(this.kritIdx < ks.length-1) this.kritIdx++;
-    save(); this.zeigen();
+    save();
+    if(this.kritIdx < ks.length-1){ this.kritIdx++; this.zeigen(); }
+    else { setTimeout(()=>{ if(this.offen) this.weiter(1); }, 350); this.zeigen(); }
   },
 
   taste(e){
     const W = Workshop;
     if(!W.offen) return;
+    if(e.target && e.target.tagName === "SELECT") return;
     if(e.key === "Escape"){ e.preventDefault(); W.schliessen(); return; }
-    if(e.key === "ArrowRight" || e.key === "PageDown" || e.key === " "){ e.preventDefault(); W.weiter(1); return; }
+    if(e.key === "ArrowRight" || e.key === "PageDown" || e.key === " " || e.key === "Enter"){ e.preventDefault(); W.weiter(1); return; }
     if(e.key === "ArrowLeft"  || e.key === "PageUp"){ e.preventDefault(); W.weiter(-1); return; }
     const bild = W.bilder[W.i];
-    if(bild && bild.typ === "bewerten"){
+    if(!bild) return;
+    if(bild.typ === "bewerten"){
       if(e.key === "ArrowDown"){ e.preventDefault();
         W.kritIdx = Math.min(kriterienVon(bild.dim).length-1, W.kritIdx+1); W.zeigen(); return; }
       if(e.key === "ArrowUp"){ e.preventDefault();
         W.kritIdx = Math.max(0, W.kritIdx-1); W.zeigen(); return; }
       if(/^[1-5]$/.test(e.key)){ e.preventDefault(); W.werten(Number(e.key)); return; }
+    }
+    if(bild.typ === "gewichtung" && /^[1-9]$/.test(e.key)){
+      const pr = PROFILE[Number(e.key)-1];
+      if(pr){ e.preventDefault(); S.gewichte = Object.assign({}, pr.w); save(); W.zeigen(); }
+      return;
+    }
+    if(bild.typ === "kandidaten" && /^[1-9]$/.test(e.key)){
+      const it = rangliste()[Number(e.key)-1];
+      if(it){ e.preventDefault(); it.vertiefen = !it.vertiefen; save(); W.neuBauen(); W.zeigen(); }
+      return;
+    }
+    if(bild.typ === "peakprivacy" && bild.id && /^[a-eA-E]$/.test(e.key)){
+      const it = S.items.find(x=>x.id===bild.id);
+      if(it){ e.preventDefault(); it.loesungsart = e.key.toUpperCase(); save(); W.zeigen(); }
     }
   },
 
@@ -3384,17 +3591,54 @@ const Workshop = {
       (einheiten.length === 1 ? " Einheit" : " Einheiten") + " gehören zu «" + c + "»";
   },
 
+  /* Die gemeinsamen Nenner für das erste Bild: Systeme und Muster, die
+     bei mehr als einer Einheit vorkommen. Gezählt über f1, f2 und f4. */
+  nenner(){
+    const MUSTER = [
+      ["E-Mail als Eingang", /e-?mail|\bmail\b|postfach/i],
+      ["Excel", /excel/i],
+      ["PDF und Scans", /\bpdf\b|scan/i],
+      ["Matrix 42", /matrix\s?42/i],
+      ["ERP / Fibu", /\berp\b|fibu/i],
+      ["Gerätebuch", /ger(ae|ä)tebuch/i],
+      ["Externe Lieferanten", /lieferant|dienstleister/i],
+      ["Manuelles Abtippen", /manuell|von hand|abtippen|abgetippt/i]
+    ];
+    return MUSTER.map(([n, rx]) => {
+      const einheiten = new Set();
+      let themen = 0;
+      S.items.forEach(it => {
+        if(rx.test([it.f1,it.f2,it.f4].join(" "))){ themen++; einheiten.add(it.bereich||"?"); }
+      });
+      return {n, themen, einheiten:einheiten.size};
+    }).filter(x => x.einheiten >= 2).sort((a,b)=> b.themen-a.themen).slice(0,6);
+  },
+
   zeigen(){
     const el = document.getElementById("ws"); if(!el) return;
     const bild = this.bilder[this.i];
     const it = bild.id ? S.items.find(x=>x.id===bild.id) : null;
     const fortschritt = Math.round((this.i+1) / this.bilder.length * 100);
+    const phase = this.PHASEN.find(p => p.k === bild.typ) || {n:bild.typ};
+    let buehne = "", hilfe = `<kbd>←</kbd><kbd>→</kbd> Bild · <kbd>Esc</kbd> beenden`;
 
-    const PHASEN = {thema:"Thema", verstehen:"Verstehen", bewerten:"Bewerten",
-                    position:"Positionieren", ergebnis:"Ergebnis"};
+    if(bild.typ === "auslegeordnung"){
+      const einheiten = new Set(S.items.map(i=>i.bereich).filter(Boolean));
+      const nenner = this.nenner();
+      buehne = `
+        <h1 class="ws-titel">Was auf dem Tisch liegt</h1>
+        <div class="ws-zahlen">
+          <div class="ws-zahl"><b>${S.items.length}</b><span>Themen</span></div>
+          <div class="ws-zahl"><b>${einheiten.size}</b><span>von ${EINHEITEN.length} Einheiten</span></div>
+          <div class="ws-zahl"><b>${this.cluster().gruppen.length}</b><span>gemeinsame Muster</span></div>
+        </div>
+        ${nenner.length ? `<p class="ws-echo">Was bei mehreren Einheiten vorkommt:</p>
+        <div class="ws-karten">${nenner.map(n=>`
+          <div class="ws-karte"><span class="k">${n.themen} Themen · ${n.einheiten} Einheiten</span><span class="v">${esc(n.n)}</span></div>`).join("")}
+        </div>` : ""}`;
+    }
 
-    let buehne = "";
-    if(bild.typ === "thema"){
+    if(bild.typ === "vorstellen" && bild.teil === "thema"){
       const e = this.echo(it);
       buehne = `
         <div class="ws-einheit">${esc(it.bereich || "Einheit offen")}</div>
@@ -3402,7 +3646,7 @@ const Workshop = {
         ${e?`<p class="ws-echo">${esc(e)}</p>`:""}`;
     }
 
-    if(bild.typ === "verstehen"){
+    if(bild.typ === "vorstellen" && bild.teil === "verstehen"){
       const felder = [
         ["Worum es geht", it.f1], ["Was heute nicht optimal läuft", it.f2],
         ["Wer betroffen ist", it.f3], ["Daten und Systeme", it.f4],
@@ -3416,16 +3660,32 @@ const Workshop = {
         </div>` : `<p class="ws-echo">Zu diesem Thema sind noch keine Leitfragen beantwortet.</p>`}`;
     }
 
+    if(bild.typ === "cluster"){
+      const {gruppen, einzeln} = this.cluster();
+      buehne = `
+        <h1 class="ws-titel" style="font-size:clamp(26px,3.4vw,52px)">Was zusammengehört</h1>
+        <p class="ws-echo">Vorschlag aus der Vorbereitung — die Runde entscheidet, was wirklich zusammengehört.</p>
+        <div class="ws-karten">${gruppen.map(([c,l])=>`
+          <div class="ws-karte"><span class="k">${l.length} Themen · ${new Set(l.map(x=>x.bereich)).size} Einheiten</span>
+            <span class="v" style="font-weight:700">${esc(c)}</span>
+            <span class="v ws-themen">${l.map(x=>esc(x.bereich||"?")+": "+esc(x.titel||"")).join("<br>")}</span></div>`).join("")}
+          ${einzeln.length ? `<div class="ws-karte"><span class="k">${einzeln.length} einzeln</span><span class="v" style="font-weight:700">Für sich stehend</span>
+            <span class="v ws-themen">${einzeln.map(x=>esc(x.bereich||"?")+": "+esc(x.titel||"")).join("<br>")}</span></div>` : ""}
+        </div>`;
+    }
+
     if(bild.typ === "bewerten"){
       const d = DIMENSIONEN.find(x=>x.k===bild.dim);
       const ks = kriterienVon(bild.dim);
       const b = it.bewertung || {};
       const w = dimWert(it, bild.dim);
+      const pos = this.nachCluster().findIndex(x=>x.id===it.id)+1;
       buehne = `
         <div class="row gap-16" style="justify-content:space-between;align-items:baseline">
           <div>
-            <div class="ws-einheit">${esc(it.titel || "Ohne Titel")}</div>
-            <h1 class="ws-titel" style="font-size:clamp(26px,3.2vw,48px)">${esc(d.n)}</h1>
+            <div class="ws-einheit">${esc(it.bereich||"")} · Thema ${pos} von ${S.items.length}${it.cluster?" · "+esc(it.cluster):""}</div>
+            <h1 class="ws-titel" style="font-size:clamp(22px,2.6vw,40px)">${esc(it.titel || "Ohne Titel")}</h1>
+            <div class="ws-echo" style="margin-top:6px"><b>${esc(d.n)}</b> — ${esc(d.frage)}</div>
           </div>
           <span class="ws-dimwert">${w!==null?w.toFixed(1):"—"}<span class="u" style="font-size:.5em;color:var(--ink-3)">/5</span></span>
         </div>
@@ -3440,36 +3700,99 @@ const Workshop = {
             <span class="ws-wort">${v?esc(c.s[v-1]):"noch offen"}</span>
           </div>`;
         }).join("")}</div>`;
+      hilfe = `<kbd>1</kbd>–<kbd>5</kbd> bewerten · <kbd>↑</kbd><kbd>↓</kbd> Kriterium · <kbd>←</kbd><kbd>→</kbd> Bild · <kbd>Esc</kbd> beenden`;
     }
 
-    if(bild.typ === "position"){
+    if(bild.typ === "portfolio"){
       const liste = rangliste();
+      const offen = S.items.length - liste.length;
       buehne = `
-        <div class="ws-einheit">${esc(it.titel || "Ohne Titel")}</div>
-        <h1 class="ws-titel" style="font-size:clamp(24px,3vw,44px)">Wo steht das Thema?</h1>
-        ${bewertet(it) ? `<div class="ws-matrix">${matrixSVG(liste, it.id)}</div>`
-          : `<p class="ws-echo">Noch nicht bewertet — die beiden vorigen Bilder ausfüllen.</p>`}`;
+        <h1 class="ws-titel" style="font-size:clamp(26px,3.4vw,52px)">Wo die Themen stehen</h1>
+        ${liste.length ? `<div class="ws-matrix">${matrixSVG(liste)}</div>` : `<p class="ws-echo">Noch nichts bewertet.</p>`}
+        ${offen ? `<p class="ws-echo">${offen} Thema${offen>1?"en":""} noch nicht bewertet — zurück mit ←.</p>` : ""}`;
+    }
+
+    if(bild.typ === "gewichtung"){
+      const akt = PROFILE.find(p => KRITERIEN.every(c => num(S.gewichte[c.k],c.w) === p.w[c.k]));
+      const liste = rangliste().slice(0,6);
+      buehne = `
+        <h1 class="ws-titel" style="font-size:clamp(26px,3.4vw,52px)">Was zählt uns mehr?</h1>
+        <p class="ws-echo">Gewichtung wechseln — die Rangliste ändert sich vor aller Augen.</p>
+        <div class="ws-wahl">${PROFILE.map((p,ix)=>`
+          <button type="button" class="${akt&&akt.k===p.k?"an":""}" data-ws-profil="${p.k}"><kbd>${ix+1}</kbd>${esc(p.n)}<small style="display:block;font-weight:400;opacity:.8">${esc(p.tip||"")}</small></button>`).join("")}
+        </div>
+        ${akt ? `<p class="ws-hinweis">${esc(akt.begruendung||"")}</p>` : ""}
+        <div class="ws-liste">${liste.map((x,ix)=>`
+          <div class="ws-zeile"><span class="nr">${ix+1}</span><span class="t">${esc(x.titel||"Ohne Titel")}</span><span class="e">${esc(x.bereich||"")}</span><span class="s">${score(x)}</span></div>`).join("")}
+        </div>`;
+      hilfe = `<kbd>1</kbd>–<kbd>${PROFILE.length}</kbd> Profil · <kbd>←</kbd><kbd>→</kbd> Bild · <kbd>Esc</kbd> beenden`;
+    }
+
+    if(bild.typ === "kandidaten"){
+      const liste = rangliste().slice(0,9);
+      const n = S.items.filter(i=>i.vertiefen).length;
+      buehne = `
+        <h1 class="ws-titel" style="font-size:clamp(26px,3.4vw,52px)">Welche gehen in die Vertiefung?</h1>
+        <p class="ws-echo">Zwei bis drei Themen — je eines pro Tisch. ${n ? n+" markiert." : "Noch keines markiert."}</p>
+        <div class="ws-liste">${liste.map((x,ix)=>`
+          <div class="ws-zeile ${x.vertiefen?"an":""}" data-ws-kand="${x.id}"><span class="nr">${ix+1}</span><span class="t">${esc(x.titel||"Ohne Titel")}</span><span class="e">${esc(x.bereich||"")}</span><span class="s">${score(x)}</span></div>`).join("")}
+        </div>`;
+      hilfe = `<kbd>1</kbd>–<kbd>${liste.length}</kbd> markieren · <kbd>←</kbd><kbd>→</kbd> Bild · <kbd>Esc</kbd> beenden`;
+    }
+
+    if(bild.typ === "peakprivacy" && bild.teil === "intro"){
+      buehne = `
+        <div class="ws-einheit">Zum Schluss</div>
+        <h1 class="ws-titel" style="font-size:clamp(26px,3.4vw,52px)">Was PeakPrivacy heute kann</h1>
+        <p class="ws-echo">Aus der eigenen Dokumentation des Anbieters — nicht aus dem Verkaufsgespräch.</p>
+        <div class="ws-karten">
+          <div class="ws-karte"><span class="k">Bausteine</span><span class="v">Datensammlung (Wissensbox) · Konstruktor (eigener Assistent) · Chat-API, OpenAI-kompatibel · Assistants-API · Dateien-API</span></div>
+          <div class="ws-karte"><span class="k">Betrieb</span><span class="v">Schweizer Hosting als Standard · Anonymisierung vor dem Modell · Modelle: GPT-4, Mistral, «mistral-swiss»</span></div>
+          <div class="ws-karte"><span class="k">Nicht dokumentiert</span><span class="v">Fertige Konnektoren zu ERP, Matrix 42 oder Postfächern · Excel in Wissensboxen · Bilder · Werkzeugaufrufe aus dem Assistenten</span></div>
+        </div>
+        <p class="ws-hinweis">Die Konnektoren sind also nicht Teil des Produkts — sie werden um die API herum gebaut. PeakPrivacy ist der Motor in der Schweiz; die Anbindung an unsere Systeme ist unsere Arbeit oder die eines Integrators.</p>`;
+    }
+
+    if(bild.typ === "peakprivacy" && it){
+      const vorschlag = loesungsartVorschlag(it);
+      const wahl = it.loesungsart || "";
+      const la = LOESUNGSARTEN.find(l => l.k === wahl);
+      const kandidaten = this.kandidaten();
+      const pos = kandidaten.findIndex(x=>x.id===it.id)+1;
+      buehne = `
+        <div class="ws-einheit">${esc(it.bereich||"")} · Kandidat ${pos} von ${kandidaten.length}</div>
+        <h1 class="ws-titel" style="font-size:clamp(22px,2.6vw,40px)">${esc(it.titel || "Ohne Titel")}</h1>
+        <div class="ws-wahl">${LOESUNGSARTEN.map(l=>`
+          <button type="button" class="${wahl===l.k?"an":""}" data-ws-art="${l.k}"><kbd>${l.k}</kbd>${esc(l.n)}${!wahl && vorschlag===l.k ? ' <small style="opacity:.7">— Vorschlag aus dem Text</small>' : ""}</button>`).join("")}
+        </div>
+        ${la ? `
+        <div class="ws-plan">
+          <div class="ws-karte"><span class="k">PeakPrivacy liefert</span><ol>${la.pp.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></div>
+          <div class="ws-karte"><span class="k">Eigener Konnektor</span><ol>${la.eigen.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></div>
+          <div class="ws-karte"><span class="k">So wird er gebaut</span><ol>${la.schritte.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></div>
+          <div class="ws-karte"><span class="k">Offen — Frage an PeakPrivacy</span><span class="v">${esc(la.offen)}</span></div>
+        </div>` : `<p class="ws-echo">Lösungsart wählen — dann erscheint der Bauplan.</p>`}`;
+      hilfe = `<kbd>A</kbd>–<kbd>E</kbd> Lösungsart · <kbd>←</kbd><kbd>→</kbd> Bild · <kbd>Esc</kbd> beenden`;
     }
 
     if(bild.typ === "ergebnis"){
-      const liste = rangliste();
+      const kandidaten = this.kandidaten();
       buehne = `
-        <h1 class="ws-titel" style="font-size:clamp(26px,3.4vw,52px)">Unser Portfolio</h1>
-        ${liste.length ? `<div class="ws-matrix">${matrixSVG(liste)}</div>
-        <div class="ws-karten">${liste.slice(0,6).map((x,ix)=>`
-          <div class="ws-karte"><span class="k">${ix+1} · ${esc(x.bereich||"Einheit offen")}</span>
-          <span class="v">${esc(x.titel||"Ohne Titel")}</span></div>`).join("")}</div>`
-          : `<p class="ws-echo">Noch nichts bewertet.</p>`}`;
+        <h1 class="ws-titel" style="font-size:clamp(26px,3.4vw,52px)">Was wir mitnehmen</h1>
+        <div class="ws-liste">${kandidaten.map((x,ix)=>{
+          const la = LOESUNGSARTEN.find(l => l.k === x.loesungsart);
+          return `<div class="ws-zeile an"><span class="nr">${ix+1}</span><span class="t">${esc(x.titel||"Ohne Titel")}<br><small style="font-weight:400;color:var(--ink-2)">${la ? esc(la.k+" · "+la.n+" — "+la.kurz) : "Lösungsart offen"}</small></span><span class="e">${esc(x.bereich||"")}</span></div>`;
+        }).join("")}</div>
+        <p class="ws-hinweis">Danach: Steckbriefe je Tisch ausfüllen, dann unter «Export» sichern — Markdown fürs Protokoll, JSON als Kopie. Der Bauplan je Kandidat steht in docs/anforderungen-peakprivacy.md.</p>`;
     }
-
-    const hilfe = bild.typ === "bewerten"
-      ? `<kbd>1</kbd>–<kbd>5</kbd> bewerten · <kbd>↑</kbd><kbd>↓</kbd> Kriterium · <kbd>←</kbd><kbd>→</kbd> Bild · <kbd>Esc</kbd> beenden`
-      : `<kbd>←</kbd><kbd>→</kbd> Bild wechseln · <kbd>Esc</kbd> beenden`;
 
     el.innerHTML = `
       <div class="ws-kopf">
-        <span class="ws-phase">${esc(PHASEN[bild.typ])}</span>
-        <span class="ws-zaehler">${this.i+1} von ${this.bilder.length}</span>
+        <span class="ws-phase">${esc(phase.n)}</span>
+        <span class="row gap-12" style="align-items:center">
+          <select data-ws-springen title="Zu einer Phase springen">${this.PHASEN.map(p=>`<option value="${p.k}" ${p.k===bild.typ?"selected":""}>${esc(p.n)}</option>`).join("")}</select>
+          <span class="ws-zaehler">${this.i+1} von ${this.bilder.length}</span>
+        </span>
       </div>
       <div class="ws-fort"><span style="width:${fortschritt}%"></span></div>
       <div class="ws-buehne">${buehne}</div>
@@ -3482,6 +3805,9 @@ const Workshop = {
         </span>
       </div>`;
 
+    const sel = el.querySelector("[data-ws-springen]");
+    if(sel) sel.onchange = () => this.springen(sel.value);
+
     el.onclick = e => {
       const nav = e.target.closest("[data-ws-nav]");
       if(nav){ this.weiter(Number(nav.dataset.wsNav)); return; }
@@ -3490,7 +3816,15 @@ const Workshop = {
       if(set){ const [ix,s] = set.dataset.wsSet.split(":").map(Number);
         this.kritIdx = ix; this.werten(s); return; }
       const kr = e.target.closest("[data-ws-krit]");
-      if(kr){ this.kritIdx = Number(kr.dataset.wsKrit); this.zeigen(); }
+      if(kr){ this.kritIdx = Number(kr.dataset.wsKrit); this.zeigen(); return; }
+      const pr = e.target.closest("[data-ws-profil]");
+      if(pr){ const p = PROFILE.find(x=>x.k===pr.dataset.wsProfil);
+        if(p){ S.gewichte = Object.assign({}, p.w); save(); this.zeigen(); } return; }
+      const kd = e.target.closest("[data-ws-kand]");
+      if(kd){ const x = S.items.find(i=>i.id===kd.dataset.wsKand);
+        if(x){ x.vertiefen = !x.vertiefen; save(); this.neuBauen(); this.zeigen(); } return; }
+      const art = e.target.closest("[data-ws-art]");
+      if(art && it){ it.loesungsart = art.dataset.wsArt; save(); this.zeigen(); }
     };
   }
 };
