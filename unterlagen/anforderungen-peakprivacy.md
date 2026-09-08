@@ -3,6 +3,25 @@
 Stand 6. September 2026, 14 Themen von fünf Einheiten. Wird nach der Frist
 und nach dem Workshop nachgeführt.
 
+> **Korrektur vom 8. September.** Dieses Dokument wurde gegen die öffentliche
+> Hilfe von PeakPrivacy (help.peakprivacy.ch) geschrieben. Die Plattform des
+> Pilots ist aber `ssh.peakprivacy.ch` — Open WebUI, von PeakPrivacy betrieben.
+> Sie kann mehr, als die öffentliche Hilfe beschreibt: Konstruktoren mit
+> Vision, Dateien und Notizen sowie Funktionsaufruf, Datensammlungen mit
+> Quellenangabe, Modelle in fünf Sicherheitsstufen mit `gpt-swiss` auf Level 1.
+> Zwei Konstruktoren liegen im Repo `doelfruetimann-eng/PeakPrivacy` fertig
+> vor: «Dokument-Abgleich» (deckt A und B bis zur Abweichungstabelle) und
+> «Meldung erfassen» (deckt C bis zur fertigen Meldung). Was dort **nicht**
+> geht, ist dasselbe wie hier: kein Zugriff auf ERP, Matrix 42 oder Postfächer,
+> und einen API-Zugang der Plattform für uns gibt es noch nicht. Die zwölf
+> Fragen unten bleiben gültig; Frage 8 zur «lokalen KI-Station» ist für den
+> Pilot beantwortet — es ist Schweizer Hosting, keine Station im Haus.
+>
+> Dazu ein Befund aus dem Pilot, der die Grenzen schärfer zieht als jede
+> Doku: Auf Level 3 («All data is anonymized») lag der Testtext dem Modell
+> im Klartext vor. Die Pilotregel — keine Patienten- und Personaldaten, auch
+> nicht auf Level 1 — ist damit keine Vorsicht, sondern Notwendigkeit.
+
 Ziel der Kadertagung ist nicht die Bewertung an sich, sondern die Antwort
 auf eine Frage: **Was davon lässt sich mit PeakPrivacy umsetzen?** Dafür
 muss man die Themen nicht nach Wichtigkeit sortieren, sondern nach der

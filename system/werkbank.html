@@ -474,6 +474,38 @@ input[type="range"]{width:100%;accent-color:var(--accent);margin:0}
 .ws-kopf select{background:transparent;color:var(--struktur-ink);border:1px solid rgba(255,255,255,.35);
   border-radius:6px;padding:4px 8px;font-size:clamp(12px,1vw,15px)}
 .ws-kopf select option{color:#111}
+/* «safe center»: volle Bilder werden oben angeschnitten, wenn die Bühne
+   zentriert und zu hoch ist — safe fällt dann auf flex-start zurück. */
+.ws-buehne{justify-content:safe center}
+.ws-karte .v.ws-themen{font-size:clamp(14px,1.25vw,20px);line-height:1.45;color:var(--ink-2);display:block;margin-top:10px}
+.ws-zahlen{display:flex;gap:clamp(20px,4vw,64px);flex-wrap:wrap}
+.ws-zahl{display:flex;flex-direction:column}
+.ws-zahl b{font-size:clamp(44px,6vw,96px);line-height:1;color:var(--zahl);font-variant-numeric:tabular-nums}
+.ws-zahl span{font-size:clamp(14px,1.3vw,20px);color:var(--ink-3);margin-top:6px}
+.ws-liste{display:flex;flex-direction:column;gap:clamp(6px,.8vh,12px)}
+.ws-zeile{display:flex;align-items:center;gap:clamp(12px,1.6vw,24px);padding:clamp(8px,1vh,14px) clamp(12px,1.4vw,20px);
+  background:var(--surface);border:2px solid var(--line);border-radius:var(--r-s);font-size:clamp(16px,1.6vw,26px)}
+.ws-zeile.an{border-color:var(--bordeaux);background:var(--signal-soft)}
+.ws-zeile .nr{width:clamp(30px,2.6vw,44px);height:clamp(30px,2.6vw,44px);border-radius:50%;display:grid;place-items:center;
+  background:var(--surface-2);font-weight:700;font-size:clamp(13px,1.2vw,18px);flex:none}
+.ws-zeile.an .nr{background:var(--bordeaux);color:#FFFFFF}
+.ws-zeile .t{flex:1;font-weight:600}
+.ws-zeile .e{color:var(--ink-3);font-size:.75em;white-space:nowrap}
+.ws-zeile .s{font-variant-numeric:tabular-nums;color:var(--zahl);font-weight:700;min-width:3.2em;text-align:right}
+.ws-wahl{display:flex;gap:clamp(8px,1vw,14px);flex-wrap:wrap}
+.ws-wahl button{padding:clamp(10px,1.2vh,16px) clamp(14px,1.6vw,24px);border-radius:var(--r-s);border:2px solid var(--line-2);
+  background:var(--surface);color:var(--ink);font-size:clamp(15px,1.4vw,22px);font-weight:600;cursor:pointer;text-align:left}
+.ws-wahl button.an{border-color:var(--bordeaux);background:var(--bordeaux);color:#FFFFFF}
+.ws-wahl button kbd{font-family:inherit;opacity:.6;margin-right:8px}
+.ws-plan{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,1.6vw,22px)}
+@media (max-width:900px){ .ws-plan{grid-template-columns:1fr} }
+.ws-plan ol{margin:0;padding-left:1.3em;font-size:clamp(15px,1.4vw,22px);line-height:1.45}
+.ws-plan li{margin-bottom:.35em}
+.ws-hinweis{font-size:clamp(14px,1.2vw,19px);color:var(--ink-2);padding:clamp(10px,1.2vh,16px) clamp(14px,1.6vw,22px);
+  border-left:4px solid var(--bordeaux);background:var(--signal-soft);border-radius:0 var(--r-s) var(--r-s) 0}
+.ws-kopf select{background:transparent;color:var(--struktur-ink);border:1px solid rgba(255,255,255,.35);
+  border-radius:6px;padding:4px 8px;font-size:clamp(12px,1vw,15px)}
+.ws-kopf select option{color:#111}
 .ws-matrix{max-width:min(78vw,900px);margin:0 auto;width:100%}
 @media (max-width:700px){ .ws-buehne{justify-content:flex-start} }
 :root[data-theme="dark"] .mx-dot,
@@ -1098,6 +1130,8 @@ function load(){
     migriereBewertungen(s);
     s.items.forEach(i => { if(i.loesungsart === undefined) i.loesungsart = "";
                            if(i.vertiefen === undefined) i.vertiefen = false; });
+    s.items.forEach(i => { if(i.loesungsart === undefined) i.loesungsart = "";
+                           if(i.vertiefen === undefined) i.vertiefen = false; });
     return s;
   }catch(e){ return leerState(); }
 }
@@ -1115,6 +1149,7 @@ function neuerItem(){
     uc_name:"", uc_nutzen:"", uc_risiken:"", uc_test:"",
     m_groesse:"", m_heute:"", m_ziel:"", m_wer:"", m_termin:"",
     bewertung:null, notiz:"",
+    loesungsart:"", vertiefen:false   /* Workshop: Loesungsart A-E, in die Vertiefung */,
     loesungsart:"", vertiefen:false   /* Workshop: Loesungsart A-E, in die Vertiefung */
   };
 }
@@ -2265,6 +2300,11 @@ function alsMarkdown(){
       L.push(`**Workshop:** ${it.vertiefen ? "in die Vertiefung · " : ""}` +
              (la ? `Lösungsart ${la.k} — ${la.n}` : "Lösungsart offen"));
     }
+    if(it.vertiefen || it.loesungsart){
+      const la = LOESUNGSARTEN.find(x => x.k === it.loesungsart);
+      L.push(`**Workshop:** ${it.vertiefen ? "in die Vertiefung · " : ""}` +
+             (la ? `Lösungsart ${la.k} — ${la.n}` : "Lösungsart offen"));
+    }
     L.push("");
     LEITFRAGEN.forEach((f,k)=>{
       L.push(`**${k+1}. ${f.t}**`);
@@ -3309,21 +3349,20 @@ const LOESUNGSARTEN = [
   {k:"A", n:"Dokumente lesen, Daten herausziehen",
    kurz:"Mail, PDF, Scan → Felder",
    muster:/auftragsbest|lieferschein|servicebericht|\bpdf\b|\bscan|vertrag|rechnung|beleg|e-?mail|anhang/i,
-   pp:["Chat-Completions-API (OpenAI-kompatibel): Dokumenttext hinein, Felder als JSON heraus",
-       "Alternativ Dateien-API + Assistants-API «ask» für längere Unterlagen"],
-   eigen:["Abholer: Postfach-Regel oder überwachter Scan-Ordner",
-          "Text aus PDF; bei Scans OCR — bei PeakPrivacy nicht dokumentiert",
-          "Ablage des Ergebnisses, Vorlage an einen Menschen bei Unsicherheit"],
-   schritte:["API-Token unter app.peakprivacy.ch/api-tokens",
-             "Prompt mit Feldliste (Artikel, Menge, Preis, Datum) und einem Beispiel",
-             "Zehn echte Belege durchlaufen lassen, Trefferquote messen",
-             "Unsichere Fälle zur Freigabe vorlegen — erst dann automatisch"],
-   offen:"OCR für Scans; Anonymisierung (anonymize) darf Artikelnummern nicht verändern"},
+   pp:["Konstruktor «Dokument-Abgleich» liegt fertig vor: gpt-swiss auf Level 1, Vision ein, Temperatur 0.1",
+       "Liest PDF und Scan, gleicht Position für Position gegen das Soll ab, meldet nur Abweichungen"],
+   eigen:["Heute: Person lädt Dokument und Soll von Hand hoch — kein Postfach-Abholer, kein API-Zugang der Plattform",
+          "Ergebnis von Hand ins Zielsystem — der Medienbruch bleibt, bis eine Anbindung steht"],
+   schritte:["Konstruktor anlegen, die sechs Testfälle mit erfundenen Belegen fahren",
+             "Zwei Wochen echte Auftragsbestätigungen im Einkauf: 20–30 pro Tag",
+             "Messen: Trefferquote bei Abweichungen, Zeit je Dokument mit Prüfung, Fehlalarme",
+             "Danach derselbe Konstruktor mit Serviceberichten in der Medizintechnik"],
+   offen:"Scanqualität — «nicht lesbar» muss «nicht lesbar» bleiben; greift die Anonymisierung auch bei Dateien?"},
   {k:"B", n:"Herausgezogenes abgleichen und buchen",
    kurz:"gegen ERP prüfen, bei Übereinstimmung buchen",
    muster:/\berp\b|fibu|abgleich|abgleichen|buchen|bestellung|toleranz|abweichung|kanban|bestand/i,
-   pp:["Liefert nur die strukturierten Felder (wie A)",
-       "Abgleich und Buchung sind nicht PeakPrivacy — das ist eigener Code"],
+   pp:["Der Konstruktor liefert die Abweichungstabelle — mehr nicht",
+       "Buchen im ERP ist nicht PeakPrivacy: kein Zugriff auf Systeme, kein API-Zugang für uns"],
    eigen:["Vergleich gegen die Bestellung im ERP (lesend)",
           "Toleranzregel: unter x Prozent selbst buchen, sonst vorlegen",
           "Buchung im ERP (schreibend) mit Protokoll: wer, wann, was"],
@@ -3335,20 +3374,18 @@ const LOESUNGSARTEN = [
   {k:"C", n:"Meldungen aufnehmen, ins Ticketsystem leiten",
    kurz:"Chatbot nimmt Meldung, Ticket in Matrix 42",
    muster:/matrix\s?42|ticket|meldung|melde|störung|stoerung|mangel|mängel|maengel|dispo|anfrage verteil/i,
-   pp:["Konstruktor als Meldeassistent: nimmt die Meldung auf, fragt Pflichtfelder nach",
-       "Fotos: bei PeakPrivacy «nicht oder eingeschränkt unterstützt»"],
-   eigen:["Schnittstelle zu Matrix 42: Ticket anlegen, Status lesen",
-          "Routing-Regeln: welche Meldeart an welchen Bereich",
-          "Rückmeldung an die meldende Person"],
-   schritte:["Matrix-42-Schnittstelle mit der ICT klären",
-             "Pflichtfelder je Meldeart festlegen",
-             "Konstruktor-Prompt schreiben und mit zehn Meldungen testen",
-             "Ticket-Erzeugung anbinden, dann Rückmeldung"],
-   offen:"Gibt es eine Matrix-42-Schnittstelle? Wie kommen Fotos hinein?"},
+   pp:["Konstruktor «Meldung erfassen» liegt vor: Meldung in zwei Sätzen oder mit Foto, wird vervollständigt — Ort, Gegenstand, Symptom, Dringlichkeit, Zuständigkeit",
+       "Vision ist da; Fotos vorher auf Personen und Dokumente prüfen"],
+   eigen:["Keine Anbindung an Matrix 42 nötig: die fertige Meldung wird dort von Hand eingefügt",
+          "Zuständigkeitsliste und Gebäudebezeichnungen als Notiz im Konstruktor, mit der Dispo gepflegt"],
+   schritte:["Konstruktor im Raum in zehn Minuten anlegen",
+             "Zwei Wochen erfundene und echte Meldungen in Immobilien und Betrieb",
+             "Messen: Anteil vollständiger Meldungen beim ersten Versuch, Rückfragen der Dispo, richtige Zuständigkeit"],
+   offen:"Matrix 42 selbst bleibt das Problem — fünf Nennungen. Eine perfekte Meldung in einem System, das niemand bedient, bleibt liegen."},
   {k:"D", n:"Termine und Abläufe auslösen",
    kurz:"Auslöser in einem System, Aktion in einem anderen",
    muster:/termin|wartung|report|lernende|auslösen|ausloesen|automatisch anstossen|erinnerung/i,
-   pp:["Kaum beteiligt — höchstens Textbausteine für die Benachrichtigung"],
+   pp:["Kein KI-Fall: Verfügbarkeiten und Auslöser, nicht Text — das Modell greift nicht auf Kalender oder Systeme zu"],
    eigen:["Regelwerk: Auslöser (Gerätebuch, HR) → Aktion (Termin, Report)",
           "Bestätigungsschritt durch einen Menschen"],
    schritte:["Auslöser und Ziel benennen",
@@ -3358,15 +3395,14 @@ const LOESUNGSARTEN = [
   {k:"E", n:"Fragen an die eigenen Daten stellen",
    kurz:"Wissensbox, Antwort mit Quelle",
    muster:/auswert|prognose|dialog|lifecycle|investition|anlagen|übersicht|uebersicht|kennzahl|analys/i,
-   pp:["Datensammlung (Wissensbox) + Konstruktor — das Kernprodukt",
-       "Grenzen laut Doku: 3 GB, kein Excel, kein Sync — Daten müssen exportiert und hochgeladen werden"],
-   eigen:["Exporter: Berichte und Tabellen regelmässig als CSV oder PDF in die Datensammlung (Dateien-API)",
-          "Rechte: wer darf welche Sammlung befragen"],
-   schritte:["Datenquellen als CSV oder PDF exportieren",
-             "Datensammlung anlegen, Konstruktor mit Rollen-Prompt",
-             "Zehn Testfragen mit bekannten Antworten",
-             "Sichtbarkeit je Rolle regeln"],
-   offen:"Automatischer Abgleich der Daten; Zugriffsrechte je Rolle"}
+   pp:["Datensammlung plus Konstruktor — Fragen an hochgeladene Dokumente, Antwort mit Quelle",
+       "Grenze: das Modell liest und formuliert, es rechnet nicht zuverlässig — bei 3000 Objekten nur Mustererkennung, keine Berechnung"],
+   eigen:["Export von Hand als CSV oder PDF in die Datensammlung — kein Sync, kein API-Zugang",
+          "Wer darf welche Sammlung befragen: mit T7 (Rechte als Moderator) klären"],
+   schritte:["Datenquelle als Excel-Export bereitstellen",
+             "Datensammlung anlegen, T5 (Treffsicherheit) und T6 (Prompt-Injection) fahren",
+             "Zehn Testfragen mit bekannten Antworten"],
+   offen:"T6 Prompt-Injection ist noch nicht gefahren — vorher keine Wissensbasis auf internen Dokumenten"}
 ];
 
 function loesungsartVorschlag(it){
@@ -3707,13 +3743,13 @@ const Workshop = {
       buehne = `
         <div class="ws-einheit">Zum Schluss</div>
         <h1 class="ws-titel" style="font-size:clamp(26px,3.4vw,52px)">Was PeakPrivacy heute kann</h1>
-        <p class="ws-echo">Aus der eigenen Dokumentation des Anbieters — nicht aus dem Verkaufsgespräch.</p>
+        <p class="ws-echo">Aus der Plattform des Pilots und dem, was dort geprüft wurde — nicht aus dem Verkaufsgespräch.</p>
         <div class="ws-karten">
-          <div class="ws-karte"><span class="k">Bausteine</span><span class="v">Datensammlung (Wissensbox) · Konstruktor (eigener Assistent) · Chat-API, OpenAI-kompatibel · Assistants-API · Dateien-API</span></div>
-          <div class="ws-karte"><span class="k">Betrieb</span><span class="v">Schweizer Hosting als Standard · Anonymisierung vor dem Modell · Modelle: GPT-4, Mistral, «mistral-swiss»</span></div>
-          <div class="ws-karte"><span class="k">Nicht dokumentiert</span><span class="v">Fertige Konnektoren zu ERP, Matrix 42 oder Postfächern · Excel in Wissensboxen · Bilder · Werkzeugaufrufe aus dem Assistenten</span></div>
+          <div class="ws-karte"><span class="k">Bausteine auf ssh.peakprivacy.ch</span><span class="v">Konstruktor mit Systemprompt, Dateien und Notizen, Vision, Funktionsaufruf · Datensammlung mit Quellenangabe · Modelle in fünf Sicherheitsstufen, gpt-swiss auf Level 1</span></div>
+          <div class="ws-karte"><span class="k">Was der Pilot gezeigt hat</span><span class="v">Level 3 verarbeitete Klartext trotz «anonymized» · beim Wechsel auf ein rotes Modell keine Warnung · Chattitel entstehen aus dem Inhalt — darum: keine Patienten- und Personaldaten, auch nicht auf Level 1</span></div>
+          <div class="ws-karte"><span class="k">Was es nicht gibt</span><span class="v">Zugriff auf ERP, Matrix 42 oder Postfächer · einen API-Zugang der Plattform für uns · zuverlässiges Rechnen · Sprechererkennung bei Mitschriften</span></div>
         </div>
-        <p class="ws-hinweis">Die Konnektoren sind also nicht Teil des Produkts — sie werden um die API herum gebaut. PeakPrivacy ist der Motor in der Schweiz; die Anbindung an unsere Systeme ist unsere Arbeit oder die eines Integrators.</p>`;
+        <p class="ws-hinweis">Der Konstruktor ist das Werkzeug: Dokument hinein, Ergebnis heraus, Person prüft. Was ins Zielsystem muss, geht heute von Hand. Zwei Konstruktoren liegen fertig vor — Dokument-Abgleich und Meldung erfassen.</p>`;
     }
 
     if(bild.typ === "peakprivacy" && it){
@@ -3731,9 +3767,9 @@ const Workshop = {
         ${la ? `
         <div class="ws-plan">
           <div class="ws-karte"><span class="k">PeakPrivacy liefert</span><ol>${la.pp.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></div>
-          <div class="ws-karte"><span class="k">Eigener Konnektor</span><ol>${la.eigen.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></div>
-          <div class="ws-karte"><span class="k">So wird er gebaut</span><ol>${la.schritte.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></div>
-          <div class="ws-karte"><span class="k">Offen — Frage an PeakPrivacy</span><span class="v">${esc(la.offen)}</span></div>
+          <div class="ws-karte"><span class="k">Was von Hand bleibt</span><ol>${la.eigen.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></div>
+          <div class="ws-karte"><span class="k">Erster Test in 90 Tagen</span><ol>${la.schritte.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></div>
+          <div class="ws-karte"><span class="k">Grenze</span><span class="v">${esc(la.offen)}</span></div>
         </div>` : `<p class="ws-echo">Lösungsart wählen — dann erscheint der Bauplan.</p>`}`;
       hilfe = `<kbd>A</kbd>–<kbd>E</kbd> Lösungsart · <kbd>←</kbd><kbd>→</kbd> Bild · <kbd>Esc</kbd> beenden`;
     }

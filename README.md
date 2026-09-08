@@ -21,8 +21,8 @@ bewertet und priorisiert.
 
 ## Stand
 
-- **6 von 9 Personen** haben abgegeben
-- **17 Themen** aus **6 von 9 Organisationseinheiten**
+- **7 von 9 Personen** haben abgegeben
+- **20 Themen** aus **7 von 9 Organisationseinheiten**
 - Frist: 7. September 2026 · Tagung: 14. September 2026
 
 ## Was hier liegt

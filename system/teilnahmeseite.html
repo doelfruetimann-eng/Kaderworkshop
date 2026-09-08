@@ -895,6 +895,13 @@ function vHub(){
 /* ---------- Im Gespräch erfassen: die KI interviewt, fasst zusammen, übernimmt ---------- */
 function vInterview(){
   const eigene = Z.iv.verlauf.filter(m => m.r === "ich").length;
+  /* Der Knopf «Zusammenfassen und übernehmen» erscheint erst, wenn die KI
+     alle fünf Punkte abgedeckt hat und selbst dazu auffordert — vorher gab
+     es Skelette mit nur der ersten Antwort. Rückfalltür: nach acht eigenen
+     Antworten auf jeden Fall, falls die KI die Aufforderung nie schreibt. */
+  const letzteKi = [...Z.iv.verlauf].reverse().find(m => m.r === "ki");
+  const fertigErlaubt = eigene >= 8 ||
+    (!!letzteKi && /Zusammenfassen und (ü|ue)bernehmen/i.test(letzteKi.t));
   const verlauf = Z.iv.verlauf.map(m => '<div class="blase ' + (m.r === "ich" ? "ich" : "ki") + '">' + esc(m.t) + '</div>').join("") +
     (Z.iv.denkt ? '<div class="blase ki denkt">… denkt nach</div>' : "");
   return schirm(
@@ -911,7 +918,7 @@ function vInterview(){
       '<button class="btn btn-primary" data-iv-senden' + (Z.iv.denkt ? " disabled" : "") + '>Senden</button>' +
     '</div></div>' +
     '<div class="nav" style="margin-top:14px"><button class="btn btn-ghost" data-iv-abbruch>&larr; Abbrechen</button>' +
-      '<span class="rechts">' + (eigene >= 2 ? '<button class="btn btn-primary" data-iv-fertig' + (Z.iv.denkt ? " disabled" : "") + '>Zusammenfassen und übernehmen</button>' : "") + '</span></div>' +
+      '<span class="rechts">' + (fertigErlaubt ? '<button class="btn btn-primary" data-iv-fertig' + (Z.iv.denkt ? " disabled" : "") + '>Zusammenfassen und übernehmen</button>' : "") + '</span></div>' +
     '<p class="feldhint">Die Texte dieses Gesprächs gehen an den KI-Anbieter (Anthropic). Keine Patientendaten, Rollen statt Namen.</p>'
   );
 }

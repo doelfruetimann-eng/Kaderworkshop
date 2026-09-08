@@ -472,3 +472,84 @@ Ich speichere die Excel-Liste der offenen Forderungen aus dem Buchhaltungssystem
 
 Die KI koennte die Aufbereitung sowie die Pivotierung und Gruppierung uebernehmen. Auf Basis der erfassten Priorisierung koennte sie vorschlagen, welche Faelle zuerst abzuarbeiten sind, und den Ueberblick sicherstellen. Zudem koennte sie die Umstrukturierung der Liste ins Format fuer das Betreibungsregister strukturiert unterstuetzen.
 
+
+## Daniela Graf — Medizinische Codierung
+
+### 1. Krankenkassenrückweisungen: Stellungnahmen kosten viel Zeit
+
+**Worum geht es? Welcher Ablauf, welche Aufgabe?**
+
+In der medizinischen Kodierung bearbeiten wir Rückweisungen der Krankenversicherungen zu bereits codierten Fällen. Es geht um die Beanstandungen der Kodierung, der Akutspitalbedürftigkeit und von 'ambulant vor stationär', zu denen wir mit Regeln und Gesetzen argumentieren müssen, weshalb die Fälle so abgerechnet wurden.
+
+**Wie läuft es heute ab, und was kostet das an Zeit und Nerven?**
+
+Von rund 1500 Berichtsanforderungen pro Jahr sind ca. 200 argumentativen Fälle. Ein Fall dauert je nach Komplexität zwischen 15 Minuten und 1.5 Stunden, teils braucht es 3-4 Stellungnahmen pro Fall. Insgesamt kostet uns das ca. 1-2 Tage pro Kodierer pro Monat für die Kontrolle, das Recherchieren und Aufsetzen der Stellungnahmen.
+
+**Wer ist betroffen?**
+
+Beteiligt sind hauptsächlich Kodiererinnen und Kodierer sowie die Leitung Kodierung, dazu die Ärztinnen und Ärzte.
+
+**Welche Systeme, Daten und Unterlagen sind im Spiel?**
+
+Wir ziehen die Unterlagen aus der Dokumentation im KIS. Dazu kommen Regelwerke wie die Kodierrichtlinien, das SwissDRG-Regelwerk und das KVG. Der Schriftverkehr läuft per Mail und wird im Kodiertool abgelegt, der Versand an die Versicherer erfolgt meist digital, je nach Kasse auch per Post.
+
+**Wie sähe es aus, wenn es gut wäre?**
+
+Das Ziel wäre, bei Beanstandungen der Krankenversicherungen, diese durch die KI vorab via Kodierrichtlinien, Gesetze, Regeln etc. prüfen zu lassen und je nach Ergebnis direkt durch die KI Stellungnahmen aufsetzten zu lassen, bei denen die Verweise auf die Regelwerke automatisch gezogen werden. Je nach Reklamation, sollte gleichzeitig auch die Nachweise aus der Dokumentation gezogen werden.
+
+**Wo könnte KI oder ein Werkzeug helfen?**
+
+Die KI könnte vorab prüfen, ob die Kodierung nachweisbar und nach Kodierregeln angewendet wurde, und im gleichen Schritt eine gute Argumentation für die Krankenversicherung verfassen, sodass wir nur noch kontrollieren müssten. Auch beim Auffinden der Belegstellen in der Fallakte sehe ich Potenzial und könnten für die Stellungnahme gleich fertiggestellt werden; die Fristen werden bereits im Kodiertool erfasst.
+
+### 2. Kostenvoranschlaege (KOVO): Bearbeitung und Berechnung automatisieren
+
+**Worum geht es? Welcher Ablauf, welche Aufgabe?**
+
+Die Kliniken schicken der medizinischen Kodierung die Angaben für das Erstellen von Kostenvoranschläge inklusive Diagnose, Behandlung und Verweildauer. Die medizinischen Kodierung berechnet daraus dann den Kostenvoranschlag, anschließende Weiterbearbeitung durch die Fakturierung.
+
+**Wie läuft es heute ab, und was kostet das an Zeit und Nerven?**
+
+Die Anfragen kommen per Mail als ausgefülltes Formular, je nachdem fehlen Details und wir müssen alles wieder an die Klinik zurückschicken. Es sind im Durchschnitt ca. 3 KOVO pro Woche mit je ca. 10-15 Minuten Aufwand, und ca. 3-4 Rueckfragen pro Monat wegen fehlender Angaben.
+
+**Wer ist betroffen?**
+
+Beteiligt sind die medizinische Kodierung, die Fakturierung sowie die Sekretariate der Kliniken; teilweise kommen die KOVO auch direkt von den Aerzten.
+
+**Welche Systeme, Daten und Unterlagen sind im Spiel?**
+
+Das Formular der Klinik, das per Mail geschickt wird, die Kodierrichtlinien sowie der SwissDRG Online Grouper, mit dem wir die SwissDRG mit Kostengewicht ermitteln und an die Fakturierung weitergeben.
+
+**Wie sähe es aus, wenn es gut wäre?**
+
+Der Kostenvoranschlag wird auf Basis der Angaben der Klinik automatisch erstellt und berechnet, sodass weder die medizinische Kodierung noch die Fakturierung oder weitere Stellen beteiligt sein müssen.
+
+**Wo könnte KI oder ein Werkzeug helfen?**
+
+Ich sehe die KI für alle drei Schritte: zuerst die Prüfung auf Vollständigkeit inklusive Rückfragen an die Klinik, dann das Ermitteln der SwissDRG und des Kostengewichts und anschließend die Weiterbearbeitung der Fakturierung.
+
+### 3. Fehlerhafte BfS-Eintritts- und Austrittsmerkmale bei stationären Fällen
+
+**Worum geht es? Welcher Ablauf, welche Aufgabe?**
+
+Es geht um die Kontrolle der BfS-Eintritts- und Austrittsmerkmale eines stationären Falles, zum Beispiel Aufenthalt vor Eintritt und nach Austritt (zuhause, Altersheim etc.) oder Behandlung nach Austritt (ambulant, stationaer, geheilt). Diese Merkmale werden teils von der Patientenadministration, teils von der Pflege bei Eintritt und Austritt erfasst.
+
+**Wie läuft es heute ab, und was kostet das an Zeit und Nerven?**
+
+Es kommt immer wieder zu Fehlern, die wir in der Kodierung ausbessern müssen, bevor wir einen Fall zur Fakturierung abschliessen.  Bei rund 10'000 Akutfällen sind etwa 8-10 % der Daten falsch, in der Psychiatrie bei 700 stationären Fällen 80-85 % (wahrscheinlich wegen fehlender Schulung), in der Reha bei knapp 600 Fällen etwa 15 %. Die Korrektur dauert rund 8-20 Sekunden pro Fall,  in der Summe kommt hier einiges im Jahr zusammen, dazu Rückfragen. Übersehen wir einen Fehler, kann es zu Erlösunterschieden führen, die oft erst in der Revision entdeckt werden. Die letzten Jahre waren das hauptsächlich die Fehler bei der Revision.
+
+**Wer ist betroffen?**
+
+Betroffen sind vor allem wir Codiererinnen und Codierer, die die Korrekturen vornehmen und ggf. Rückfragen stellen. Beteiligt sind zudem die Pflege und die Patientenadministration als erfassende Stellen.
+
+**Welche Systeme, Daten und Unterlagen sind im Spiel?**
+
+Die Merkmale sind im KIS (Klinikinformationssystem) erfasst. Zur Klärung schauen wir in die Dokumentation, also Austrittsberichte und Pflegedokumentation.
+
+**Wie sähe es aus, wenn es gut wäre?**
+
+Das Ziel wäre, dass bei fehlerhafter Erfassung dieser Angaben, die KI auf der Grundlage der Dokumentation, diese direkt korrekt ändert.
+
+**Wo könnte KI oder ein Werkzeug helfen?**
+
+Die KI könnte während eines stationären Aufenthaltes die Dokumentation prüfen, ob diese Felder korrekt ausgefüllt wurden, und sie gegebenenfalls anpassen bzw. im KIS mutieren.
+

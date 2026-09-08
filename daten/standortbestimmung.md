@@ -54,3 +54,12 @@ Initialer Aufwand
 - **Werkzeuge:** ChatGPT, DeepL, Gemini, Microsoft Copilot, Claude
 - **Erwartung:** Entlastung von einfachen, wiederkehrenden oder häufigen Tätigkeiten. Steigerung der qualitativen und quantitativen Ausführung durch unterstütztes strukturiertes Vorgehen und Überwachung. 
 - **Sorgen:** Überforderung aufgrund der Vielzahl an Möglichkeiten mit KI. Überforderung der Mitarbeitenden. Sinnvoller Einsatz. Einhalten der Datenschutzgrenzen. Fehlende Strukturen wie Corporate Design SSH. Übermässige Produktion von Texten als Beschäftigungstherapie statt pragmatisch und zielgerichtet fokussiert.
+
+## Daniela Graf — Medizinische Codierung
+
+- **Nutzung heute:** mehrmals pro Woche
+- **Wofür schon genutzt:** Texte schreiben oder verbessern, Übersetzen, Recherchieren und Fragen stellen
+- **Werkzeuge:** ChatGPT, Gemini, Claude
+- **Erwartung:** Ich erhoffe mir Unterstützung und Zeitersparnis 
+- **Sorgen:** Datenschutz von sensiblen Patientendaten. 
+Das die Kontrolle der KI Ergebnisse zu viel Zeit kostet bis sie korrekt eingesetzt werden kann. 
